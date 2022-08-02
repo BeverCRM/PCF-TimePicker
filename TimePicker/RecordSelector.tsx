@@ -3,8 +3,6 @@ import { ComboBox, IDropdownStyles } from '@fluentui/react';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { timesList } from './TimeList';
 
-console.log(timesList);
-
 export interface IRecordSelectorProps {
   onChange: (date: Date) => void;
   currentDate: Date | null;
@@ -28,7 +26,6 @@ function formatAMPM(date?: Date | null) {
 }
 
 function getTimeAmPm(date?: Date | null): string {
-  console.log(date, 'date');
   if (!date) return '---';
   const timeAmPM: string | null = formatAMPM(date);
 
@@ -46,7 +43,6 @@ const comboBoxStyles: Partial<IDropdownStyles> = {
 export const RecordSelector: React.FunctionComponent<IRecordSelectorProps> = props => {
   const { onChange, currentDate } = props;
   let text = getTimeAmPm(currentDate);
-
   const selectedKey = React.useRef<string | undefined>(text);
   selectedKey.current = text;
 
@@ -66,7 +62,6 @@ export const RecordSelector: React.FunctionComponent<IRecordSelectorProps> = pro
 
         if (item) {
           [hour, minute] = item.key.toString().split(':');
-
           newDate.setHours(Number(hour));
           newDate.setMinutes(Number(minute));
         }
@@ -76,10 +71,10 @@ export const RecordSelector: React.FunctionComponent<IRecordSelectorProps> = pro
           [hour, minute] = time.split(':');
 
           if (format === 'PM') {
-            if (Number(hour) + 12 === 24) newDate.setHours(-12);
+            if (Number(hour) === 12) newDate.setHours(12);
             else newDate.setHours(Number(hour) + 12);
           }
-          else if (Number(hour) + 12 === 24) {
+          else if (Number(hour) === 12) {
             newDate.setHours(0);
           }
           else {

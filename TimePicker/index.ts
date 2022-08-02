@@ -1,7 +1,6 @@
 import { IInputs, IOutputs } from './generated/ManifestTypes';
 import * as React from 'react';
 import { RecordSelector } from './RecordSelector';
-import { unmountComponentAtNode } from 'react-dom';
 
 export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private container: HTMLDivElement;
@@ -13,7 +12,6 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
 
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void,
       state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
-
       this.container = container;
       this.notifyOutputChanged = notifyOutputChanged;
     }
@@ -47,6 +45,6 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public destroy(): void {
-      unmountComponentAtNode(this.container);
+      // unmountComponentAtNode(this.container);
     }
 }
