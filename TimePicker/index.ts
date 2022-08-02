@@ -1,77 +1,52 @@
 import { IInputs, IOutputs } from './generated/ManifestTypes';
-import { HelloWorld, IHelloWorldProps } from './HelloWorld';
 import * as React from 'react';
+import { RecordSelector } from './RecordSelector';
+import { unmountComponentAtNode } from 'react-dom';
 
-export class TimePicker implements ComponentFramework.ReactControl<IInputs, IOutputs> {
-    private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
-    private notifyOutputChanged: () => void;
+export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+    private container: HTMLDivElement;
+    private notifyOutputChanged:()=> void;
+    private currentDate: Date | null
 
-    constructor() { }
-    
-    public init(
-      context: ComponentFramework.Context<IInputs>,
-      notifyOutputChanged: () => void,
-      // eslint-disable-next-line no-unused-vars
-      state: ComponentFramework.Dictionary,
-    ): void {
+    constructor() {
+    }
+
+    public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void,
+      state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
+
+      this.container = container;
       this.notifyOutputChanged = notifyOutputChanged;
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      console.log(context);
+      const d365DateValue = context.parameters.sampleProperty.raw;
 
-      const props: IHelloWorldProps = { name: 'Hello, World!' };
+      if (d365DateValue) {
+        const d365TimeZone = context.userSettings.getTimeZoneOffsetMinutes();
+        d365DateValue.setMinutes(
+          d365DateValue.getMinutes() + d365DateValue.getTimezoneOffset() + d365TimeZone);
+      }
+
       return React.createElement(
-        HelloWorld, props,
+        RecordSelector, {
+          currentDate: d365DateValue,
+
+          onChange: date => {
+            this.currentDate = date;
+            context.parameters.sampleProperty.raw = date;
+            this.notifyOutputChanged();
+          },
+        },
       );
     }
 
     public getOutputs(): IOutputs {
-      return { };
+      return {
+        sampleProperty: this.currentDate ?? undefined,
+      };
     }
 
     public destroy(): void {
-      // Add code to cleanup control if necessary
+      unmountComponentAtNode(this.container);
     }
 }
-
-// import { IInputs, IOutputs } from './generated/ManifestTypes';
-// // import { HelloWorld, IHelloWorldProps } from './HelloWorld';
-// import { DatePickerBasicExample } from './HelloWorld';
-// import * as React from 'react';
-// import ReactDOM = require('react-dom');
-
-// export class TimePicker implements ComponentFramework.ReactControl<IInputs, IOutputs> {
-//   private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
-//   private notifyOutputChanged: () => void;
-//   private container: HTMLDivElement;
-//   private entityName : string;
-
-//   constructor() { }
-
-//   public init(
-//     context: ComponentFramework.Context<IInputs>,
-//     notifyOutputChanged: () => void,
-//     state: ComponentFramework.Dictionary,
-//     container: HTMLDivElement,
-//   ): void {
-//     this.notifyOutputChanged = notifyOutputChanged;
-//     this.container = container;
-//     // this.entityName = context.parameters.sampleProperty.
-
-//   }
-
-//   public updateView(context: ComponentFramework.Context<IInputs>): void {
-
-//     ReactDOM.render(React.createElement(DatePickerBasicExample), this.container);
-
-//   }
-
-//   public getOutputs(): IOutputs {
-//     return {};
-//   }
-
-//   public destroy(): void {
-//     // Add code to cleanup control if necessary
-//   }
-// }
