@@ -1,6 +1,7 @@
 import { IComboBoxOption } from '@fluentui/react';
 
 export const timesList: IComboBoxOption[] = [
+  { text: '---', key: '---' },
   { text: '12:00 AM', key: '00:00' }, { text: '12:30 AM', key: '00:30' },
   { text: '1:00 AM', key: '01:00' }, { text: '1:30 AM', key: '01:30' },
   { text: '2:00 AM', key: '02:00' }, { text: '2:30 AM', key: '02:30' },
