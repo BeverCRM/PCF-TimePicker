@@ -5,7 +5,7 @@ import { timesList } from '../TimeList';
 import { comboBoxStyles, clockIconeStyles } from '../styles/TimePickerStyles';
 
 export interface ITimeSelectorProps {
-  onChange: (date: Date) => void;
+  onChange: (date: Date | null) => void;
   currentDate: Date | null;
 }
 
@@ -18,11 +18,13 @@ function formattedTime(date?: Date | null): string {
   });
 }
 
-export const onValueChange = (item: IComboBoxOption | undefined,
-  value: string | undefined, currentDate: Date | null,
-  onChange: Function) => {
+// let text: string;
 
-  !currentDate ? currentDate = new Date() : currentDate;
+export const onValueChange = (item: IComboBoxOption | undefined,
+  value: string | undefined, changedValue: Date | null,
+  onChange: Function, setCurrentDate: Function, setText: Function) => {
+
+  let newValue: Date | null = changedValue ? new Date(changedValue) : new Date();
   let time, format, hour, minute;
 
   if (value) {
@@ -30,32 +32,40 @@ export const onValueChange = (item: IComboBoxOption | undefined,
     [hour, minute] = time.split(':');
 
     if (format === 'PM') {
-      if (Number(hour) === 12) currentDate.setHours(12);
-      else currentDate.setHours(Number(hour) + 12);
+      if (Number(hour) === 12) newValue.setHours(12);
+      else newValue.setHours(Number(hour) + 12);
     }
     else if (format === 'AM' && Number(hour) === 12) {
-      currentDate.setHours(0);
+      newValue.setHours(0);
     }
     else {
-      currentDate.setHours(Number(hour));
+      newValue.setHours(Number(hour));
     }
-    currentDate.setMinutes(Number(minute));
+    newValue.setMinutes(Number(minute));
   }
 
   else if (item) {
-    if (item.key === '---') { currentDate = null; }
+    if (item.key === '---') { newValue = null; }
     else {
       [hour, minute] = item.key.toString().split(':');
-      currentDate.setHours(Number(hour));
-      currentDate.setMinutes(Number(minute));
+      newValue.setHours(Number(hour));
+      newValue.setMinutes(Number(minute));
     }
   }
-  onChange(currentDate);
+
+  // text = formattedTime(newValue);
+  setText(formattedTime(newValue));
+  setCurrentDate(newValue);
+  onChange(newValue);
 };
 
 export const TimeSelector: React.FunctionComponent<ITimeSelectorProps> = props => {
+
   const { onChange, currentDate } = props;
-  const text = formattedTime(currentDate);
+  const [ changedValue, setCurrentDate ] = React.useState(currentDate);
+  const [ text, setText ] = React.useState(formattedTime(changedValue));
+
+  // setCurrentDate(currentDate);
 
   return (
     <ComboBox
@@ -65,7 +75,7 @@ export const TimeSelector: React.FunctionComponent<ITimeSelectorProps> = props =
       allowFreeform
       iconButtonProps={{ onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock" /> }}
       onChange = { (event, item, index, value) => {
-        onValueChange(item, value, currentDate, onChange);
+        onValueChange(item, value, changedValue, onChange, setCurrentDate, setText);
       }}
     />
   );

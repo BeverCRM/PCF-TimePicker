@@ -3,38 +3,39 @@ import * as React from 'react';
 import { TimeSelector } from './components/TimeSelector';
 
 export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+    private context: ComponentFramework.Context<IInputs>;
     private container: HTMLDivElement;
     private notifyOutputChanged:()=> void;
-    private currentDate: Date | null
+    private changedDate: Date | null;
 
     constructor() {
     }
 
-    public correctTimeZoneForD365(d365DateValue: Date,
-      context: ComponentFramework.Context<IInputs>) {
+    public correctTimeZoneForD365(d365DateValue: Date) {
 
-      const d365TimeZone = context.userSettings.getTimeZoneOffsetMinutes();
+      const d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes();
       d365DateValue.setMinutes(
         d365DateValue.getMinutes() + d365DateValue.getTimezoneOffset() + d365TimeZone);
     }
 
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void,
       state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
-
+      this.context = context;
       this.container = container;
+      this.changedDate = context.parameters.dateProperty.raw;
       this.notifyOutputChanged = notifyOutputChanged;
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      const d365DateValue = context.parameters.dateProperty.raw;
-      if (d365DateValue) this.correctTimeZoneForD365(d365DateValue, context);
+      this.changedDate = context.parameters.dateProperty.raw;
+      if (this.changedDate) this.correctTimeZoneForD365(this.changedDate);
 
       return React.createElement(
         TimeSelector, {
-          currentDate: d365DateValue,
+          currentDate: this.changedDate,
 
           onChange: date => {
-            this.currentDate = date;
+            this.changedDate = date;
             this.notifyOutputChanged();
           },
         },
@@ -43,7 +44,7 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
 
     public getOutputs(): IOutputs {
       return {
-        dateProperty: this.currentDate ?? undefined,
+        dateProperty: this.changedDate ?? undefined,
       };
     }
 
