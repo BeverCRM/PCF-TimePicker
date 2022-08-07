@@ -4,38 +4,37 @@ import { TimeSelector } from './components/TimeSelector';
 
 export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private context: ComponentFramework.Context<IInputs>;
-    private container: HTMLDivElement;
     private notifyOutputChanged:()=> void;
-    private changedDate: Date | null;
+    private d365Date: Date | null;
 
     constructor() {
+      
     }
 
-    public correctTimeZoneForD365(d365DateValue: Date) {
+    public correctTimeZoneForD365(date: Date | null): Date | null {
+      if (date === null || date.toString() === 'Invalid Date') return null;
 
       const d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes();
-      d365DateValue.setMinutes(
-        d365DateValue.getMinutes() + d365DateValue.getTimezoneOffset() + d365TimeZone);
+      return new Date(date.setMinutes(
+        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone)
+      );
     }
 
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void,
       state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
       this.context = context;
-      this.container = container;
-      this.changedDate = context.parameters.dateProperty.raw;
       this.notifyOutputChanged = notifyOutputChanged;
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      this.changedDate = context.parameters.dateProperty.raw;
-      if (this.changedDate) this.correctTimeZoneForD365(this.changedDate);
+      this.d365Date = this.correctTimeZoneForD365(context.parameters.dateProperty.raw);
 
       return React.createElement(
         TimeSelector, {
-          currentDate: this.changedDate,
+          currentDate: this.d365Date,
 
           onChange: date => {
-            this.changedDate = date;
+            this.d365Date = date;
             this.notifyOutputChanged();
           },
         },
@@ -44,7 +43,7 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
 
     public getOutputs(): IOutputs {
       return {
-        dateProperty: this.changedDate ?? undefined,
+        dateProperty: this.d365Date ?? undefined,
       };
     }
 

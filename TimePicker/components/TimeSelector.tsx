@@ -18,64 +18,25 @@ function formattedTime(date?: Date | null): string {
   });
 }
 
-// let text: string;
-
-export const onValueChange = (item: IComboBoxOption | undefined,
-  value: string | undefined, changedValue: Date | null,
-  onChange: Function, setCurrentDate: Function, setText: Function) => {
-
-  let newValue: Date | null = changedValue ? new Date(changedValue) : new Date();
-  let time, format, hour, minute;
-
-  if (value) {
-    [time, format] = value.split(' ');
-    [hour, minute] = time.split(':');
-
-    if (format === 'PM') {
-      if (Number(hour) === 12) newValue.setHours(12);
-      else newValue.setHours(Number(hour) + 12);
-    }
-    else if (format === 'AM' && Number(hour) === 12) {
-      newValue.setHours(0);
-    }
-    else {
-      newValue.setHours(Number(hour));
-    }
-    newValue.setMinutes(Number(minute));
-  }
-
-  else if (item) {
-    if (item.key === '---') { newValue = null; }
-    else {
-      [hour, minute] = item.key.toString().split(':');
-      newValue.setHours(Number(hour));
-      newValue.setMinutes(Number(minute));
-    }
-  }
-
-  // text = formattedTime(newValue);
-  setText(formattedTime(newValue));
-  setCurrentDate(newValue);
-  onChange(newValue);
-};
-
 export const TimeSelector: React.FunctionComponent<ITimeSelectorProps> = props => {
-
-  const { onChange, currentDate } = props;
-  const [ changedValue, setCurrentDate ] = React.useState(currentDate);
-  const [ text, setText ] = React.useState(formattedTime(changedValue));
-
-  // setCurrentDate(currentDate);
+  const { currentDate, onChange } = props;
 
   return (
     <ComboBox
-      text={text}
+      text={formattedTime(currentDate)}
       options={timesList}
       styles= {comboBoxStyles}
       allowFreeform
       iconButtonProps={{ onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock" /> }}
-      onChange = { (event, item, index, value) => {
-        onValueChange(item, value, changedValue, onChange, setCurrentDate, setText);
+      onChange={(event, item, index, value) => {
+        let newValue: Date | null = currentDate ? new Date(currentDate) : new Date();
+      
+        if (item) newValue = new Date(`${newValue.toDateString()} ${item.text}`);
+        else if (value) newValue = new Date(`${newValue.toDateString()} ${value}`);
+        else newValue = null;
+
+        if (newValue?.toString() === 'Invalid Date') newValue = currentDate;
+        onChange(newValue);
       }}
     />
   );

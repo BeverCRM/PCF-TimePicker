@@ -1,11 +1,26 @@
 export const comboBoxStyles = {
-  callout: { height: 160, overflowY: 'overlay', width: 200 },
+  callout: {
+    height: '230px !important',
+    overflowY: 'auto !important',
+    width: '200px !important',
+
+    '.ms-Callout-main': {
+      maxHeight: 'none !important',
+      overflowY: 'hidden !important',
+    },
+  },
   root: {
-    '&.ms-ComboBox::after': { border: 'none' },
-    ':hover': { border: '1px solid' },
+    '::after': {
+      border: 'none !important',
+    },
+    ':hover': {
+      border: '1px solid !important',
+    },
   },
 };
 
 export const clockIconeStyles = {
-  root: { fontSize: 15 },
+  root: {
+    fontSize: '15px !important',
+  },
 };
