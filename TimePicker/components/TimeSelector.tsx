@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ComboBox, IComboBoxOption } from '@fluentui/react';
+import { ComboBox } from '@fluentui/react';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { timesList } from '../TimeList';
 import { comboBoxStyles, clockIconeStyles } from '../styles/TimePickerStyles';
@@ -18,26 +18,38 @@ function formattedTime(date?: Date | null): string {
   });
 }
 
-export const TimeSelector: React.FunctionComponent<ITimeSelectorProps> = props => {
+const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
   const { currentDate, onChange } = props;
+  const [ date, setDate ] = React.useState(currentDate);
+
+  React.useEffect(() => {
+    setDate(currentDate);
+  }, [currentDate]);
 
   return (
     <ComboBox
-      text={formattedTime(currentDate)}
+      text={formattedTime(date)}
       options={timesList}
-      styles= {comboBoxStyles}
+      styles={comboBoxStyles}
       allowFreeform
-      iconButtonProps={{ onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock" /> }}
+      iconButtonProps={{
+        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock" />,
+      }}
       onChange={(event, item, index, value) => {
         let newValue: Date | null = currentDate ? new Date(currentDate) : new Date();
-      
+
         if (item) newValue = new Date(`${newValue.toDateString()} ${item.text}`);
         else if (value) newValue = new Date(`${newValue.toDateString()} ${value}`);
         else newValue = null;
 
         if (newValue?.toString() === 'Invalid Date') newValue = currentDate;
+        setDate(newValue);
         onChange(newValue);
       }}
     />
   );
 };
+
+export const TimeSelector = React.memo(TimeSelectorInternal, (prev, next) =>
+  formattedTime(prev.currentDate) === formattedTime(next.currentDate),
+);

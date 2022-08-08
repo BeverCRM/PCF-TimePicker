@@ -4,24 +4,23 @@ import { TimeSelector } from './components/TimeSelector';
 
 export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private context: ComponentFramework.Context<IInputs>;
-    private notifyOutputChanged:()=> void;
+    private notifyOutputChanged:() => void;
     private d365Date: Date | null;
 
     constructor() {
-      
     }
 
-    public correctTimeZoneForD365(date: Date | null): Date | null {
+    private correctTimeZoneForD365(date: Date | null): Date | null {
       if (date === null || date.toString() === 'Invalid Date') return null;
 
       const d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes();
       return new Date(date.setMinutes(
-        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone)
+        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone),
       );
     }
 
-    public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void,
-      state: ComponentFramework.Dictionary, container:HTMLDivElement): void {
+    public init(context: ComponentFramework.Context<IInputs>,
+      notifyOutputChanged: () => void): void {
       this.context = context;
       this.notifyOutputChanged = notifyOutputChanged;
     }
@@ -48,6 +47,5 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public destroy(): void {
-
     }
 }
