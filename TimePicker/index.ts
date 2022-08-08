@@ -1,56 +1,51 @@
-import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import { HelloWorld, IHelloWorldProps } from "./HelloWorld";
-import * as React from "react";
+import { IInputs, IOutputs } from './generated/ManifestTypes';
+import * as React from 'react';
+import { TimeSelector } from './components/TimeSelector';
 
-export class TimePicker implements ComponentFramework.ReactControl<IInputs, IOutputs> {
-    private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
-    private notifyOutputChanged: () => void;
+export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+    private context: ComponentFramework.Context<IInputs>;
+    private notifyOutputChanged:() => void;
+    private d365Date: Date | null;
 
-    /**
-     * Empty constructor.
-     */
-    constructor() { }
-
-    /**
-     * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
-     * Data-set values are not initialized here, use updateView.
-     * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to property names defined in the manifest, as well as utility functions.
-     * @param notifyOutputChanged A callback method to alert the framework that the control has new outputs ready to be retrieved asynchronously.
-     * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
-     */
-    public init(
-        context: ComponentFramework.Context<IInputs>,
-        notifyOutputChanged: () => void,
-        state: ComponentFramework.Dictionary
-    ): void {
-        this.notifyOutputChanged = notifyOutputChanged;
+    constructor() {
     }
 
-    /**
-     * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
-     * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
-     * @returns ReactElement root react element for the control
-     */
+    private correctTimeZoneForD365(date: Date | null): Date | null {
+      if (date === null || date.toString() === 'Invalid Date') return null;
+
+      const d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes();
+      return new Date(date.setMinutes(
+        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone),
+      );
+    }
+
+    public init(context: ComponentFramework.Context<IInputs>,
+      notifyOutputChanged: () => void): void {
+      this.context = context;
+      this.notifyOutputChanged = notifyOutputChanged;
+    }
+
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        const props: IHelloWorldProps = { name: 'Hello, World!' };
-        return React.createElement(
-            HelloWorld, props
-        );
+      this.d365Date = this.correctTimeZoneForD365(context.parameters.dateProperty.raw);
+
+      return React.createElement(
+        TimeSelector, {
+          currentDate: this.d365Date,
+
+          onChange: date => {
+            this.d365Date = date;
+            this.notifyOutputChanged();
+          },
+        },
+      );
     }
 
-    /**
-     * It is called by the framework prior to a control receiving new data.
-     * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
-     */
     public getOutputs(): IOutputs {
-        return { };
+      return {
+        dateProperty: this.d365Date ?? undefined,
+      };
     }
 
-    /**
-     * Called when the control is to be removed from the DOM tree. Controls should use this call for cleanup.
-     * i.e. cancelling any pending remote calls, removing listeners, etc.
-     */
     public destroy(): void {
-        // Add code to cleanup control if necessary
     }
 }
