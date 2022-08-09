@@ -19,8 +19,8 @@ function formattedTime(date?: Date | null): string {
   });
 }
 
-const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
-  const { isControlDisabled, currentDate, onChange } = props;
+export const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
+  const { currentDate, isControlDisabled, onChange } = props;
   const [ date, setDate ] = React.useState(currentDate);
 
   React.useEffect(() => {
@@ -53,5 +53,6 @@ const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props 
 };
 
 export const TimeSelector = React.memo(TimeSelectorInternal, (prev, next) =>
-  formattedTime(prev.currentDate) === formattedTime(next.currentDate),
+  formattedTime(prev.currentDate) === formattedTime(next.currentDate) &&
+  prev.isControlDisabled === next.isControlDisabled,
 );

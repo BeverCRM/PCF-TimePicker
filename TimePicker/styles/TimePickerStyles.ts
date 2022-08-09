@@ -8,6 +8,7 @@ export const comboBoxStyles = {
       maxHeight: 'none !important',
       overflowY: 'hidden !important',
     },
+
   },
   root: {
     '::after': {
@@ -16,6 +17,13 @@ export const comboBoxStyles = {
     ':hover': {
       border: '1px solid !important',
     },
+  },
+  rootDisabled: {
+    backgroundColor: 'white !important',
+  },
+  inputDisabled: {
+    backgroundColor: 'white !important',
+    color: 'black',
   },
 };
 
