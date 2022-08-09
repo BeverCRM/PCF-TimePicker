@@ -31,7 +31,7 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
       return React.createElement(
         TimeSelector, {
           currentDate: this.d365Date,
-
+          isControlDisabled: context.mode.isControlDisabled,
           onChange: date => {
             this.d365Date = date;
             this.notifyOutputChanged();

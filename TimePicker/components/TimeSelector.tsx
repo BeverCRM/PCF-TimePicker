@@ -7,6 +7,7 @@ import { comboBoxStyles, clockIconeStyles } from '../styles/TimePickerStyles';
 export interface ITimeSelectorProps {
   onChange: (date: Date | null) => void;
   currentDate: Date | null;
+  isControlDisabled: boolean;
 }
 
 function formattedTime(date?: Date | null): string {
@@ -19,7 +20,7 @@ function formattedTime(date?: Date | null): string {
 }
 
 const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
-  const { currentDate, onChange } = props;
+  const { isControlDisabled, currentDate, onChange } = props;
   const [ date, setDate ] = React.useState(currentDate);
 
   React.useEffect(() => {
@@ -28,6 +29,7 @@ const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props 
 
   return (
     <ComboBox
+      disabled = { isControlDisabled }
       text={formattedTime(date)}
       options={timesList}
       styles={comboBoxStyles}
