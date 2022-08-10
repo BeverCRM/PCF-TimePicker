@@ -35,7 +35,8 @@ export const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> =
       styles={comboBoxStyles}
       allowFreeform
       iconButtonProps={{
-        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock" />,
+        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock"
+          className='iconClass' />,
       }}
       onChange={(event, item, index, value) => {
         let newValue: Date | null = currentDate ? new Date(currentDate) : new Date();

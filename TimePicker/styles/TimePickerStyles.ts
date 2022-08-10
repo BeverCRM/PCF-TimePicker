@@ -8,9 +8,10 @@ export const comboBoxStyles = {
       maxHeight: 'none !important',
       overflowY: 'hidden !important',
     },
-
   },
   root: {
+    paddingLeft: '5px !important',
+    marginRight: '5px !important',
     '::after': {
       border: 'none !important',
     },
@@ -18,12 +19,24 @@ export const comboBoxStyles = {
       border: '1px solid !important',
     },
   },
+
   rootDisabled: {
-    backgroundColor: 'white !important',
+    backgroundColor: 'transparent !important',
+    paddingLeft: '0px !important',
+    ':hover': {
+      backgroundColor: 'rgb(216, 216, 216) !important',
+      border: 'none !important',
+    },
   },
   inputDisabled: {
-    backgroundColor: 'white !important',
-    color: 'black',
+    paddingLeft: '5px !important',
+    backgroundColor: 'transparent !important',
+    color: 'rgb(50, 49, 58) !important',
+
+    ':hover': {
+      backgroundColor: 'rgb(216, 216, 216) !important',
+      border: 'none !important',
+    },
   },
 };
 
