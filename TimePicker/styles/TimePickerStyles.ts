@@ -12,6 +12,8 @@ export const comboBoxStyles = {
   root: {
     paddingLeft: '5px !important',
     marginRight: '5px !important',
+    height: '35px',
+    marginTop: '3px',
     '::after': {
       border: 'none !important',
     },
