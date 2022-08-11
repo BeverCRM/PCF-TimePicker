@@ -1,7 +1,7 @@
 export const comboBoxStyles = {
   callout: {
     height: '230px !important',
-    overflowY: 'auto !important',
+    overflowY: 'overlay !important',
     width: '200px !important',
 
     '.ms-Callout-main': {
