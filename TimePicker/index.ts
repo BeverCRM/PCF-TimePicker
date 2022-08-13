@@ -10,15 +10,6 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     constructor() {
     }
 
-    private correctTimeZoneForD365(date: Date | null): Date | null {
-      if (date === null || date.toString() === 'Invalid Date') return null;
-
-      const d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes();
-      return new Date(date.setMinutes(
-        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone),
-      );
-    }
-
     public init(context: ComponentFramework.Context<IInputs>,
       notifyOutputChanged: () => void): void {
       this.context = context;
@@ -26,7 +17,9 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      this.d365Date = this.correctTimeZoneForD365(context.parameters.dateProperty.raw);
+
+      const currentDate: string | undefined = context.parameters.dateProperty.formatted;
+      currentDate ? this.d365Date = new Date(currentDate) : this.d365Date = null;
 
       return React.createElement(
         TimeSelector, {
