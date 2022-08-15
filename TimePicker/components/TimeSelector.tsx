@@ -19,7 +19,7 @@ function formattedTime(date?: Date | null): string {
   });
 }
 
-export const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
+const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
   const { currentDate, isControlDisabled, onChange } = props;
   const [ date, setDate ] = React.useState(currentDate);
 
@@ -35,16 +35,16 @@ export const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> =
       styles={comboBoxStyles}
       allowFreeform
       iconButtonProps={{
-        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock"/>,
-      }}
+        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock"/> }}
       onChange={(event, item, index, value) => {
-        let newValue: Date | null = currentDate ? new Date(currentDate) : new Date();
+        let newValue: Date | null = currentDate ? currentDate : new Date();
 
         if (item) newValue = new Date(`${newValue.toDateString()} ${item.text}`);
         else if (value) newValue = new Date(`${newValue.toDateString()} ${value}`);
         else newValue = null;
 
         if (newValue?.toString() === 'Invalid Date') newValue = currentDate;
+
         setDate(newValue);
         onChange(newValue);
       }}
