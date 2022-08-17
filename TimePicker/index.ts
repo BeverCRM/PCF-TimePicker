@@ -11,10 +11,11 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public changeFormatOfDate(currentDate: string): string {
-      const [date, hour, format] = currentDate.split(' ');
-      const [year, month, day ] = date.split(/[-/.]+/);
+      const [date, time, format] = currentDate.split(' ');
+      const [year, month, day ] = date.split(/[-/.]/g);
+      const [hour, minute] = time.split(/[:.]/);
 
-      return `${month}/${day}/${year} ${hour} ${format}`;
+      return `${month}/${day}/${year} ${hour}:${minute} ${format}`;
     }
 
     public init(context: ComponentFramework.Context<IInputs>,

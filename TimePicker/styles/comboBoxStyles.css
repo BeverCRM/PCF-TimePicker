@@ -3,7 +3,7 @@
 };
 
  .ms-Button{
-}
+} 
 
 .ms-ComboBox-CaretDown-button[disabled]{
   display: none !important;
@@ -11,4 +11,4 @@
 
 .ms-ComboBox-CaretDown-button[disabled]:hover {
   background-color:transparent !important;
-} 
+}
