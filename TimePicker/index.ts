@@ -11,7 +11,12 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public changeFormatOfDate(currentDate: string): string {
-      const [date, time, format] = currentDate.split(' ');
+      let [date, time, format] = currentDate.split(' ');
+      if (format === undefined) {
+        [ date, time ] = currentDate.split(' ');
+        format = '';
+      }
+
       if (time.split('.')[0] !== time) {
         const newFormatCD = `${date} ${time.split('.').join(':')} ${format}`;
         if (new Date(newFormatCD).toString() !== 'Invalid Date') { return newFormatCD; }
@@ -29,6 +34,8 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
       let currentDate: string | undefined = context.parameters.dateProperty.formatted;
+
+      console.log(currentDate, ' currentDate');
 
       if (currentDate !== undefined && new Date(currentDate).toString() === 'Invalid Date') {
         currentDate = this.changeFormatOfDate(currentDate);
