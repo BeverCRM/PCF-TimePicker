@@ -10,12 +10,9 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     constructor() {
     }
 
-    public changeFormatOfDate(currentDate: string): string {
+    private formatDate(currentDate: string): string {
       let [date, time, format] = currentDate.split(' ');
-      if (format === undefined) {
-        [ date, time ] = currentDate.split(' ');
-        format = '';
-      }
+      format = format ?? '';
 
       if (time.split('.')[0] !== time) {
         const newFormatCD = `${date} ${time.split('.').join(':')} ${format}`;
@@ -36,10 +33,10 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
       let currentDate: string | undefined = context.parameters.dateProperty.formatted;
 
       if (currentDate !== undefined && new Date(currentDate).toString() === 'Invalid Date') {
-        currentDate = this.changeFormatOfDate(currentDate);
+        currentDate = this.formatDate(currentDate);
       }
 
-      currentDate ? this.d365Date = new Date(currentDate) : this.d365Date = null;
+      this.d365Date = currentDate ? new Date(currentDate) : null;
 
       return React.createElement(
         TimeSelector, {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ComboBox } from '@fluentui/react';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { timesList } from '../TimeList';
-import { comboBoxStyles, clockIconeStyles } from '../styles/TimePickerStyles';
+import { comboBoxStyles, clockIconeStyles } from '../styles/comboBoxStyles';
 
 export interface ITimeSelectorProps {
   onChange: (date: Date | null) => void;
@@ -35,10 +35,11 @@ const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props 
       styles={comboBoxStyles}
       allowFreeform
 
-      iconButtonProps={ {
-        onRenderIcon: () => <Icon styles = {clockIconeStyles} iconName="clock"/> }}
+      iconButtonProps={{
+        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock"/> }}
       onChange={(event, item, index, value) => {
-        let newValue: Date | null = currentDate ? currentDate : new Date();
+
+        let newValue: Date | null = currentDate ?? new Date();
 
         if (item) newValue = new Date(`${newValue.toDateString()} ${item.text}`);
         else if (value) newValue = new Date(`${newValue.toDateString()} ${value}`);
