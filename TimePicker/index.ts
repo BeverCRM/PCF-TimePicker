@@ -35,8 +35,6 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
       let currentDate: string | undefined = context.parameters.dateProperty.formatted;
 
-      console.log(currentDate, ' currentDate');
-
       if (currentDate !== undefined && new Date(currentDate).toString() === 'Invalid Date') {
         currentDate = this.changeFormatOfDate(currentDate);
       }
