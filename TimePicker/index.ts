@@ -12,9 +12,12 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
 
     public changeFormatOfDate(currentDate: string): string {
       const [date, time, format] = currentDate.split(' ');
+      if (time.split('.')[0] !== time) {
+        const newFormatCD = `${date} ${time.split('.').join(':')} ${format}`;
+        if (new Date(newFormatCD).toString() !== 'Invalid Date') { return newFormatCD; }
+      }
       const [year, month, day ] = date.split(/[-/.]/g);
       const [hour, minute] = time.split(/[:.]/);
-
       return `${month}/${day}/${year} ${hour}:${minute} ${format}`;
     }
 
