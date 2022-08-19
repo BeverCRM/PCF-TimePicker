@@ -4,23 +4,24 @@ import { TimeSelector } from './components/TimeSelector';
 
 export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private context: ComponentFramework.Context<IInputs>;
-
     private notifyOutputChanged:() => void;
-
-    private d365Date: Date | null;
+    private currentDateFormatted: Date | null;
 
     constructor() {
     }
 
-    private correctTimeZoneForD365(context: ComponentFramework.Context<IInputs>,
+    private correctTimeZoneForD365(
       date: Date | null): Date | null {
-      if (date === null || date.toString() === 'Invalid Date') return null;
+      if (date === null) return null;
 
-      let d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes(date);
-      context.parameters.dateProperty.attributes?.Behavior === 3 ? d365TimeZone = 0 : d365TimeZone;
+      const TIMEZONE_INDEPENDENT_BEHAVIOR = 3;
+      const fieldBehavior = this.context.parameters.dateProperty.attributes?.Behavior;
+      const timezoneOffsetInMinutes = fieldBehavior === TIMEZONE_INDEPENDENT_BEHAVIOR
+        ? 0
+        : this.context.userSettings.getTimeZoneOffsetMinutes(date);
 
       const newDate = new Date(date).setMinutes(
-        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone);
+        date.getMinutes() + date.getTimezoneOffset() + timezoneOffsetInMinutes);
 
       return new Date(newDate);
     }
@@ -32,14 +33,14 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      this.d365Date = this.correctTimeZoneForD365(context, context.parameters.dateProperty.raw);
+      this.currentDateFormatted = this.correctTimeZoneForD365(context.parameters.dateProperty.raw);
 
       return React.createElement(
         TimeSelector, {
-          currentDate: this.d365Date,
+          currentDate: this.currentDateFormatted,
           isControlDisabled: context.mode.isControlDisabled,
           onChange: date => {
-            this.d365Date = date;
+            this.currentDateFormatted = date;
             this.notifyOutputChanged();
           },
         },
@@ -48,7 +49,7 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
 
     public getOutputs(): IOutputs {
       return {
-        dateProperty: this.d365Date ?? undefined,
+        dateProperty: this.currentDateFormatted ?? undefined,
       };
     }
 
