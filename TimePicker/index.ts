@@ -10,17 +10,17 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     constructor() {
     }
 
-    private formatDate(currentDate: string): string {
-      let [date, time, format] = currentDate.split(' ');
-      format = format ?? '';
+    private correctTimeZoneForD365(context: ComponentFramework.Context<IInputs>,
+      date: Date | null): Date | null {
+      if (date === null || date.toString() === 'Invalid Date') return null;
 
-      if (time.split('.')[0] !== time) {
-        const newFormatCD = `${date} ${time.split('.').join(':')} ${format}`;
-        if (new Date(newFormatCD).toString() !== 'Invalid Date') { return newFormatCD; }
-      }
-      const [year, month, day ] = date.split(/[-/.]/g);
-      const [hour, minute] = time.split(/[:.]/);
-      return `${month}/${day}/${year} ${hour}:${minute} ${format}`;
+      let d365TimeZone = this.context.userSettings.getTimeZoneOffsetMinutes(date);
+      context.parameters.dateProperty.attributes?.Behavior === 3 ? d365TimeZone = 0 : d365TimeZone;
+
+      const newDate = new Date(date).setMinutes(
+        date.getMinutes() + date.getTimezoneOffset() + d365TimeZone);
+
+      return new Date(newDate);
     }
 
     public init(context: ComponentFramework.Context<IInputs>,
@@ -30,13 +30,7 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
     }
 
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      let currentDate: string | undefined = context.parameters.dateProperty.formatted;
-
-      if (currentDate !== undefined && new Date(currentDate).toString() === 'Invalid Date') {
-        currentDate = this.formatDate(currentDate);
-      }
-
-      this.d365Date = currentDate ? new Date(currentDate) : null;
+      this.d365Date = this.correctTimeZoneForD365(context, context.parameters.dateProperty.raw);
 
       return React.createElement(
         TimeSelector, {

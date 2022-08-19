@@ -1,14 +1,15 @@
 export const comboBoxStyles = {
   callout: {
     height: '230px',
-    overflowY: 'overlay',
+    overflowY: 'none',
     width: '200px',
 
     '.ms-Callout-main': {
-      maxHeight: 'none',
-      overflowY: 'hidden',
+      height: 'inherit',
+      overflowY: 'revert',
     },
   },
+
   container: {
     width: '100%',
   },
