@@ -15,7 +15,7 @@ export class TimePicker implements ComponentFramework.StandardControl<IInputs, I
       if (date === null) return null;
 
       const TIMEZONE_INDEPENDENT_BEHAVIOR = 3;
-      const fieldBehavior = this.context.parameters.dateProperty.attributes?.Behavior;
+      const fieldBehavior = this.context.parameters.dateProperty.attributes.Behavior;
       const timezoneOffsetInMinutes = fieldBehavior === TIMEZONE_INDEPENDENT_BEHAVIOR
         ? 0
         : this.context.userSettings.getTimeZoneOffsetMinutes(date);
