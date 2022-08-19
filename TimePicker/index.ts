@@ -4,7 +4,9 @@ import { TimeSelector } from './components/TimeSelector';
 
 export class TimePicker implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private context: ComponentFramework.Context<IInputs>;
+
     private notifyOutputChanged:() => void;
+
     private d365Date: Date | null;
 
     constructor() {
