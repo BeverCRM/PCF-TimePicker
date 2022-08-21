@@ -2,11 +2,12 @@ import * as React from 'react';
 import { ComboBox } from '@fluentui/react';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { timesList } from '../TimeList';
-import { comboBoxStyles, clockIconeStyles } from '../styles/TimePickerStyles';
+import { comboBoxStyles, clockIconeStyles } from '../styles/comboBoxStyles';
 
 export interface ITimeSelectorProps {
   onChange: (date: Date | null) => void;
   currentDate: Date | null;
+  isControlDisabled: boolean;
 }
 
 function formattedTime(date?: Date | null): string {
@@ -19,7 +20,7 @@ function formattedTime(date?: Date | null): string {
 }
 
 const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
-  const { currentDate, onChange } = props;
+  const { currentDate, isControlDisabled, onChange } = props;
   const [ date, setDate ] = React.useState(currentDate);
 
   React.useEffect(() => {
@@ -28,21 +29,24 @@ const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props 
 
   return (
     <ComboBox
+      disabled = { isControlDisabled }
       text={formattedTime(date)}
       options={timesList}
       styles={comboBoxStyles}
       allowFreeform
+
       iconButtonProps={{
-        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock" />,
-      }}
+        onRenderIcon: () => <Icon styles={clockIconeStyles} iconName="clock"/> }}
       onChange={(event, item, index, value) => {
-        let newValue: Date | null = currentDate ? new Date(currentDate) : new Date();
+
+        let newValue: Date | null = currentDate ?? new Date();
 
         if (item) newValue = new Date(`${newValue.toDateString()} ${item.text}`);
         else if (value) newValue = new Date(`${newValue.toDateString()} ${value}`);
         else newValue = null;
 
         if (newValue?.toString() === 'Invalid Date') newValue = currentDate;
+
         setDate(newValue);
         onChange(newValue);
       }}
@@ -51,5 +55,6 @@ const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props 
 };
 
 export const TimeSelector = React.memo(TimeSelectorInternal, (prev, next) =>
-  formattedTime(prev.currentDate) === formattedTime(next.currentDate),
+  formattedTime(prev.currentDate) === formattedTime(next.currentDate) &&
+  prev.isControlDisabled === next.isControlDisabled,
 );
