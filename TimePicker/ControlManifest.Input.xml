@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="BeverControls" constructor="TimePicker" version="1.0.0.0" display-name-key="BeverControls.TimePicker" description-key="Converts datetime field into time picker field" control-type="virtual" >
+  <control namespace="BeverControls" constructor="TimePicker" version="1.0.0" display-name-key="BeverControls.TimePicker" description-key="Converts datetime field into time picker field" control-type="virtual" >
     <property name="dateProperty" display-name-key="DateProperty" description-key="DateAndTime field" of-type="DateAndTime.DateAndTime" usage="bound" required="true"/>
 
     <resources>
