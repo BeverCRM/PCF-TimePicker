@@ -15,3 +15,12 @@ It will become as shown below.
 [![youtube-timepicker](https://user-images.githubusercontent.com/90428984/196424359-1a172c6d-a9f4-4e8f-9dca-50004a7a3320.png)](https://www.youtube.com/watch?v=apItceOl36g)
 
 [![Download zip](https://custom-icon-badges.herokuapp.com/badge/-Download-green?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://marketplace.bevercrm.com/pcf-controls/4)
+
+
+
+<div class="button-group minor-group">
+    <a href="#" class="button primary">Dashboard</a>
+    <a href="#" class="button">Inbox</a>
+    <a href="#" class="button">Account</a>
+    <a href="#" class="button">Logout</a>
+</div>
