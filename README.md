@@ -10,4 +10,8 @@ It will become as shown below.
 
 ![TimePicker-2](https://user-images.githubusercontent.com/90428984/196408790-777db19f-1344-4bf5-bcc6-c273189ff88b.png)
 
+# Demo TimePicker PCF Control
+
 [![youtube-timepicker](https://user-images.githubusercontent.com/90428984/196424359-1a172c6d-a9f4-4e8f-9dca-50004a7a3320.png)](https://www.youtube.com/watch?v=apItceOl36g)
+
+[![Download zip](https://custom-icon-badges.herokuapp.com/badge/-Download-green?style=for-the-badge&logo=download&logoColor=white "Download zip")](https://marketplace.bevercrm.com/pcf-controls/4)
