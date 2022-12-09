@@ -21,16 +21,11 @@ function formattedTime(date?: Date | null): string {
 
 const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props => {
   const { currentDate, isControlDisabled, onChange } = props;
-  const [ date, setDate ] = React.useState(currentDate);
-
-  React.useEffect(() => {
-    setDate(currentDate);
-  }, [currentDate]);
 
   return (
     <ComboBox
       disabled = { isControlDisabled }
-      text={formattedTime(date)}
+      text={formattedTime(currentDate)}
       options={timesList}
       styles={comboBoxStyles}
       allowFreeform
@@ -47,7 +42,6 @@ const TimeSelectorInternal: React.FunctionComponent<ITimeSelectorProps> = props 
 
         if (newValue?.toString() === 'Invalid Date') newValue = currentDate;
 
-        setDate(newValue);
         onChange(newValue);
       }}
     />
