@@ -29,6 +29,9 @@
       "node": {
         "extensions": [".tsx", ".d.ts", ".ts"]
       }
+    },
+    "react": {
+      "version": "detect"
     }
   }
 }
