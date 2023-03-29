@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="BeverControls" constructor="TimePicker" version="1.0.0" display-name-key="BeverControls.TimePicker" description-key="Converts datetime field into time picker field" control-type="virtual" >
+  <control namespace="BeverControls" constructor="TimePicker" version="1.0.1" display-name-key="BeverControls.TimePicker" description-key="Converts datetime field into time picker field" control-type="virtual" >
     <property name="dateProperty" display-name-key="DateProperty" description-key="DateAndTime field" of-type="DateAndTime.DateAndTime" usage="bound" required="true"/>
-
     <resources>
       <code path="index.ts" order="1"/>
       <platform-library name="React" version="16.8.6" />
       <platform-library name="Fluent" version="8.29.0" />
     </resources>
-      <!-- <feature-usage>
-        <uses-feature name="Device.captureAudio" required="true" />
-        <uses-feature name="Device.captureImage" required="true" />
-        <uses-feature name="Device.captureVideo" required="true" />
-        <uses-feature name="Device.getBarcodeValue" required="true" />
-        <uses-feature name="Device.getCurrentPosition" required="true" />
-        <uses-feature name="Device.pickFile" required="true" />
-        <uses-feature name="Utility" required="true" />
-        <uses-feature name="WebAPI" required="true" />
-      </feature-usage> -->
   </control>
 </manifest>
