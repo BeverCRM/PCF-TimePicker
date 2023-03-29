@@ -1,0 +1,16 @@
+name: Create a new release and upload the solution to Azure blob storage CI
+
+on:
+  push:
+    branches: release
+
+jobs:
+  main:
+    uses: BeverCRM/Workflow-Build-Release-Upload-CI/.github/workflows/build-release-upload-ci.yml@master
+    secrets: inherit
+    with:
+      control-title: Time Picker
+      control-description: This control converts datetime field into time picker field.
+      control-thumbnail-url: https://user-images.githubusercontent.com/60586462/197760907-044bb70d-75df-41a1-9166-e2fca061a9c7.png
+      control-youtube-video-url: https://www.youtube.com/watch?v=apItceOl36g
+      control-tags: Field
