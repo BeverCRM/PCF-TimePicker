@@ -14,7 +14,7 @@ It will become as shown below.
 <br>
 
 <!-- <IGNORE> -->
-[![Download-Btn](https://user-images.githubusercontent.com/90428984/196970215-5355b724-6ebc-4457-995b-d3f4ebb450cf.png)](https://marketplace.bevercrm.com/pcf-controls/TimePicker)
+[![Download-Btn](https://user-images.githubusercontent.com/90428984/196970215-5355b724-6ebc-4457-995b-d3f4ebb450cf.png)](https://marketplace.bevercrm.com/pcf-controls/3)
 
 # Demo TimePicker PCF Control
 
