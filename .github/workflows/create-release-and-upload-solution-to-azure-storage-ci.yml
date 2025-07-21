@@ -14,3 +14,4 @@ jobs:
       control-thumbnail-url: https://user-images.githubusercontent.com/60586462/197760907-044bb70d-75df-41a1-9166-e2fca061a9c7.png
       control-youtube-video-url: https://www.youtube.com/watch?v=apItceOl36g
       control-tags: Field
+      create-new-release: false
